@@ -5,24 +5,21 @@ def spacer(num):
     for x in range(num):
         print("")
 health = 100
+maxHealth = health
 ehealth = 100
 newFight = True
 exp = 0
 totalExp = 0
-#How much exp is needed to level up
-lvlUpExp = 10
+lvlUpExp = 10 #How much exp is needed to level up
+baseExp = 10
 lvlUp = True
 level = 1
-#How much damage player does
-strength = 5
-#Can the player attack
-stamina = 100
-#Amount of damage reduced
-defense = 5
-#Who goes first
-speed = 5
-#How much exp player gains
-intelligence = 5
+strength = 5 #How much damage player does
+stamina = 20 #Can the player attack
+fillSta = stamina
+defense = 5 #Amount of damage reduced
+speed = 5 #Who goes first
+intelligence = 5 #How much exp player gains
 points = 0
 print("Hello warrior, enter your name.")
 name = input()
@@ -37,12 +34,15 @@ while(newFight == True):
         if response == "Admin":
             points = 100
             print("Hey Matt you now have:", points, "points!")
-        if response != "Strength" and response != "Stamina" and response != "Defense" and response != "Speed" and response != "Intelligence":
-            while(response != "Strength" and response != "Stamina" and response != "Defense" and response != "Speed" and response != "Intelligence"):
+        if response != "Strength" and response != "Stamina" and response != "Defense" and response != "Speed" and \
+                        response != "Intelligence":
+            while(response != "Strength" and response != "Stamina" and response != "Defense" and response != "Speed" and
+                          response != "Intelligence"):
                 print(response,"is not a valid choice.\nPlease try again.")
                 response = input()
                 response = response.capitalize()
-                if(response == "Strength" and response == "Stamina" and response == "Defense" and response == "Speed" and response == "Intelligence"):
+                if(response == "Strength" and response == "Stamina" and response == "Defense" and response == "Speed" and
+                           response == "Intelligence"):
                     break
         if(response == "Strength"):
             print("How many points would you like in Strength?")
@@ -102,7 +102,8 @@ while(newFight == True):
         if(points == 0):
             break
     if(lvlUp == True):
-        print("Here are your stats.\nStrength:",strength,"\nStamina:",stamina,"\nDefense:",defense,"\nSpeed:",speed,"\nIntelligence:",intelligence)
+        print("Here are your stats.\nStrength:",strength,"\nStamina:",stamina,"\nDefense:",defense,"\nSpeed:",speed,
+              "\nIntelligence:",intelligence)
     lvlUp = False
     spacer(2)
     print("You encounter an enemy!")
@@ -113,11 +114,17 @@ while(newFight == True):
         print("Attack = 1, Block = 2, Heal = 3")
         print(name,"health:",health,"| Stamina:",stamina,"| EXP: ",totalExp,"\nEnemy health:",ehealth)
         print("What is your move?")
-        dmg = random.randint(50,100)
-        edmg = random.randint(1,10)
+        dmg = random.randint(strength,strength*2)
+        edmg = random.randint(0,level*10)
         move = int(input())
-        dmgBlocked = defense
+        dmgBlocked = random.randint(defense,defense*2)
         spacer(2)
+        if(move != 1 and move != 2 and move != 3):
+            while(move != 1 and move != 2 and move != 3):
+                print(move,"is not a valid move, please try again.")
+                move = int(input())
+                if(move == 1 and move == 2 and move == 3):
+                    break
         if(move == 1 and stamina > 0):
             if(roll == roll2):
                 print("You missed!")
@@ -126,6 +133,11 @@ while(newFight == True):
                     stamina = 0
                 health -= edmg
                 print("Enemy deals:",edmg,"damage!")
+                spacer(2)
+            elif(edmg == 0):
+                print("Enemy missed!")
+                ehealth -= dmg
+                print("Damage done:",dmg)
                 spacer(2)
             else:
                 ehealth -= dmg
@@ -143,6 +155,7 @@ while(newFight == True):
             edmg -= dmgBlocked
             if(dmgBlocked > edmg):
                 print("You blocked the attack!")
+                spacer(2)
                 stamina += 2
                 if(stamina >= 10):
                     stamina = 10
@@ -162,11 +175,12 @@ while(newFight == True):
                 print("Enemy did:",edmg,"damage!")
             elif(heal > 0):
                 health += heal
-                if(health > 100):
-                    health = 100
+                if(health > maxHealth):
+                    health = maxHealth
                 print("You healed:",heal,"health!")
                 health -= edmg
                 print("Enemy did:",edmg,"damage!")
+                spacer(2)
     if(health <= 0):
         print("You died!\nWould you like to try again?\n(yes/no)")
         response = input()
@@ -179,6 +193,9 @@ while(newFight == True):
                 if(response == "Yes" and response == "No"):
                     break
         if(response == "Yes"):
+            health = maxHealth
+            ehealth = 100
+            stamina = fillSta
             newFight = True
         elif(response == "No"):
             print("Very well, good effort",name)
@@ -194,13 +211,15 @@ while(newFight == True):
         if lvlUpExp == 0:
             level += 1
             lvlUp = True
-            lvlUpExp += 100
+            lvlUpExp += baseExp * 2
             print("You leveled up!\nYou are now level:",level)
+            stamina = fillSta
+            maxHealth += 10
             points = random.randint(1,3)
             print("You gained:",points,"points!")
             ehealth = 100
         spacer(1)
         print("You need:",lvlUpExp,"more exp to level up!")
         spacer(1)
-        health = 100
+        health = maxHealth
         ehealth = 100
