@@ -10,7 +10,7 @@ newFight = True
 exp = 0
 totalExp = 0
 #How much exp is needed to level up
-lvlUpExp = 100
+lvlUpExp = 10
 lvlUp = True
 level = 1
 #How much damage player does
@@ -187,6 +187,7 @@ while(newFight == True):
         exp += random.randint(intelligence,intelligence*2)
         totalExp += exp
         print("Enemy died!\nYou Win!\n(Exp earned:",exp,")")
+        spacer(1)
         lvlUpExp -= exp
         if(lvlUpExp < 0):
             lvlUpExp = 0
@@ -198,7 +199,8 @@ while(newFight == True):
             points = random.randint(1,3)
             print("You gained:",points,"points!")
             ehealth = 100
-            break
+        spacer(1)
         print("You need:",lvlUpExp,"more exp to level up!")
+        spacer(1)
         health = 100
         ehealth = 100
